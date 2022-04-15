@@ -51,4 +51,4 @@ jobs:
         run: poetry install --no-interaction --no-root
 
       - name: run 
-        run: pytest --verbose tests/docker
+        run: poetry run pytest --verbose tests/docker
