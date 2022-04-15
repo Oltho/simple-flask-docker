@@ -12,3 +12,8 @@ def test_service_account(host):
     assert user.uid == EXPECTED_UID
     assert user.group == EXPECTED_USER_GROUP
     assert user.gid == EXPECTED_GID
+
+
+def test_flask_listenning(host):
+    assert host.socket("tcp://0.0.0.0:8080").is_listening
+    

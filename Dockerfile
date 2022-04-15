@@ -10,6 +10,12 @@ ENV SERVICE_ACCOUNT_USER=oltho \
     POETRY_VERSION=1.1.12 \
     PIP_VERSION=22.0.4
 
+# install utils unix package
+RUN apt-get update && apt-get install -y \
+  iproute2 \
+  && rm -rf /var/lib/apt/lists/*
+
+
 # creation of service account and directory for project
 RUN addgroup --system --gid ${SERVICE_ACCOUNT_GID} ${SERVICE_ACCOUNT_GROUP} \
   && adduser --system --no-create-home --shell /bin/false --uid ${SERVICE_ACCOUNT_UID} --gid ${SERVICE_ACCOUNT_GID} ${SERVICE_ACCOUNT_USER} \
@@ -26,6 +32,7 @@ RUN pip install --no-cache-dir --upgrade pip==${PIP_VERSION} \
   && poetry config virtualenvs.create false \
   && poetry install --no-interaction --no-ansi
 
+# fix permission
 RUN chown -R ${SERVICE_ACCOUNT_USER}:${SERVICE_ACCOUNT_GROUP} /home/${SERVICE_ACCOUNT_USER}/${PROJECT_NAME}
 USER ${SERVICE_ACCOUNT_USER}
 
