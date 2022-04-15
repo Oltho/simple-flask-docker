@@ -22,3 +22,22 @@ A simple python Flask app that will be package as docker image
 ```
 poetry install
 ```
+
+### Docker
+
+#### Linter
+To enforce Dockerfile syntax we are using [hadolint](https://github.com/hadolint/hadolint)
+
+```
+hadolint Dockerfile
+```
+
+#### Test
+We are testing the Docker image with [pytest-testinfra](https://github.com/pytest-dev/pytest-testinfra).
+
+_Note: as this is a runtime test you need to be able to run the docker image to test it_
+
+```
+# poetry install
+pytest --verbose tests/docker
+```

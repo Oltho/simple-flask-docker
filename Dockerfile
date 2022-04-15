@@ -11,7 +11,8 @@ ENV SERVICE_ACCOUNT_USER=oltho \
     PIP_VERSION=22.0.4
 
 # install utils unix package
-RUN apt-get update && apt-get install -y \
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install --no-install-recommends -y \
   iproute2 \
   && rm -rf /var/lib/apt/lists/*
 
@@ -30,7 +31,7 @@ COPY poetry.lock pyproject.toml ./
 RUN pip install --no-cache-dir --upgrade pip==${PIP_VERSION} \
   && pip install --no-cache-dir poetry==${POETRY_VERSION} \
   && poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi
+  && poetry install --no-dev --no-interaction --no-ansi
 
 # fix permission
 RUN chown -R ${SERVICE_ACCOUNT_USER}:${SERVICE_ACCOUNT_GROUP} /home/${SERVICE_ACCOUNT_USER}/${PROJECT_NAME}
