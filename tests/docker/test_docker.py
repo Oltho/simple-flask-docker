@@ -6,7 +6,7 @@ EXPECTED_UID: int = 2001
 EXPECTED_USER_GROUP: str = "oltho"
 EXPECTED_GID: int = 2001
 
-
+@pytest.mark.docker
 def test_service_account(host):
     user = host.user()
     assert user.name == EXPECTED_USER_NAME
@@ -14,7 +14,7 @@ def test_service_account(host):
     assert user.group == EXPECTED_USER_GROUP
     assert user.gid == EXPECTED_GID
 
-
+@pytest.mark.docker
 def test_flask_listenning(host):
     # can fetch dynamic expected value from ENV variable WITHIN container
     env: dict = host.environment()
@@ -23,7 +23,7 @@ def test_flask_listenning(host):
     assert host.socket(
         f"tcp://{expected_listen_host}:{expected_listen_port}").is_listening
 
-
+@pytest.mark.docker
 def test_pip(host):
     env: dict = host.environment()
     expected_pip_version = env.get("PIP_VERSION")

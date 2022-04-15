@@ -8,6 +8,7 @@ import testinfra
 
 # scope='session' uses the same container for all the tests;
 # scope='function' uses a new container per test function.
+@pytest.mark.docker
 @pytest.fixture(scope='session')
 def host(request):
     IMAGE_NAME: str = os.getenv("TESTINFRA_DOCKER_IMAGE_NAME", "")

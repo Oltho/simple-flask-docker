@@ -39,5 +39,5 @@ _Note: as this is a runtime test you need to be able to run the docker image to 
 
 ```
 # poetry install
-pytest --verbose tests/docker
+poetry run pytest --verbose tests/docker -m docker
 ```
