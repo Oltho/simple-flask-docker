@@ -17,8 +17,6 @@ jobs:
 
   docker-testinfra:
     runs-on: ubuntu-latest
-    defaults:
-      python-version: 3.7
     steps:
       - uses: actions/checkout@v2
 
