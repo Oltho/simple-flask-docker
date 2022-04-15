@@ -4,6 +4,7 @@ on: push
 
 env:
   PYTHON_VERSION: 3.7
+  DOCKER_IMAGE_NAME: oltho/simple_flask_docker:${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
 
 jobs:
   docker-linter:
@@ -15,10 +16,49 @@ jobs:
         with:
           dockerfile: "Dockerfile"
 
+  docker-build:
+    runs-on: ubuntu-latest
+    outputs:
+      docker_image_tag: ${{ env.DOCKER_IMAGE_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and export
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: ${{ env.DOCKER_IMAGE_NAME }}
+          outputs: type=docker,dest=/tmp/myimage.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myimage
+          path: /tmp/myimage.tar
+
   docker-testinfra:
     runs-on: ubuntu-latest
+    needs: docker-build
     steps:
       - uses: actions/checkout@v2
+      # load previously build docker image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: myimage
+          path: /tmp
+      - name: Load image
+        run: |
+          docker load --input /tmp/myimage.tar
+          docker image ls -a
 
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         id: setup-python
@@ -50,5 +90,7 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
-      - name: run 
+      - name: run
         run: poetry run pytest --verbose tests/docker -m docker
+        env:
+          TESTINFRA_DOCKER_IMAGE_NAME: ${{ needs.docker-build.outputs.docker_image_tag }}
