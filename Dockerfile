@@ -17,8 +17,8 @@ RUN addgroup --system --gid ${SERVICE_ACCOUNT_GID} ${SERVICE_ACCOUNT_GROUP} \
 
 # copy application code
 WORKDIR /home/${SERVICE_ACCOUNT_USER}/${PROJECT_NAME}
-COPY src poetry.lock pyproject.toml ./
-RUN chown -R ${SERVICE_ACCOUNT_USER}:${SERVICE_ACCOUNT_GROUP} /home/${SERVICE_ACCOUNT_USER}/${PROJECT_NAME}
+COPY simple_flask simple_flask
+COPY poetry.lock pyproject.toml ./
 
 # Project initialization:
 RUN pip install --no-cache-dir --upgrade pip==${PIP_VERSION} \
@@ -26,8 +26,9 @@ RUN pip install --no-cache-dir --upgrade pip==${PIP_VERSION} \
   && poetry config virtualenvs.create false \
   && poetry install --no-interaction --no-ansi
 
+RUN chown -R ${SERVICE_ACCOUNT_USER}:${SERVICE_ACCOUNT_GROUP} /home/${SERVICE_ACCOUNT_USER}/${PROJECT_NAME}
 USER ${SERVICE_ACCOUNT_USER}
 
 EXPOSE ${FLASK_PORT}
 
-CMD [ "python", "src/python/simple_flask/main.py" ]
+CMD [ "python", "simple_flask/main.py" ]
