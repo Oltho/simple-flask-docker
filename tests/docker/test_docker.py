@@ -1,5 +1,6 @@
 import pytest
 
+# can have hard coded expected value
 EXPECTED_USER_NAME: str = "oltho"
 EXPECTED_UID: int = 2001
 EXPECTED_USER_GROUP: str = "oltho"
@@ -15,5 +16,16 @@ def test_service_account(host):
 
 
 def test_flask_listenning(host):
-    assert host.socket("tcp://0.0.0.0:8080").is_listening
-    
+    # can fetch dynamic expected value from ENV variable WITHIN container
+    env: dict = host.environment()
+    expected_listen_host = env.get("FLASK_HOST")
+    expected_listen_port = env.get("FLASK_PORT")
+    assert host.socket(
+        f"tcp://{expected_listen_host}:{expected_listen_port}").is_listening
+
+
+def test_pip(host):
+    env: dict = host.environment()
+    expected_pip_version = env.get("PIP_VERSION")
+
+    assert expected_pip_version in host.run("pip --version").stdout
