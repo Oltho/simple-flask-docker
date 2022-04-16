@@ -127,7 +127,7 @@ jobs:
 
       - name: GHCR
         run: |
-          docker tag ${{ env.DOCKER_IMAGE_NAME }} ${{ GHCR_IMAGE_URL }}
-          docker push ${{ GHCR_IMAGE_URL }}
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} ${{ env.GHCR_IMAGE_URL }}
+          docker push ${{ env.GHCR_IMAGE_URL }}
         env:
           GHCR_IMAGE_URL: ghcr.io/oltho/${{ env.DOCKER_IMAGE_NAME }}
