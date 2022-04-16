@@ -4,7 +4,7 @@ on: push
 
 env:
   PYTHON_VERSION: 3.7
-  DOCKER_IMAGE_NAME: oltho/simple_flask_docker:${{ github.ref_name }}-${{ github.sha }}
+  DOCKER_IMAGE_NAME: simple_flask_docker:${{ github.ref_name }}-${{ github.sha }}
 
 jobs:
   docker-linter:
