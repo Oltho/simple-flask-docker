@@ -133,3 +133,9 @@ jobs:
           docker push ${{ env.GHCR_IMAGE_URL }}
         env:
           GHCR_IMAGE_URL: ghcr.io/oltho/${{ env.DOCKER_IMAGE_NAME }}
+      - name: push docker image to JFROG
+        run: |
+          docker tag ${{ env.DOCKER_IMAGE_NAME }} ${{ env.JFROG_IMAGE_URL }}
+          docker push ${{ env.JFROG_IMAGE_URL }}
+        env:
+          JFROG_IMAGE_URL: oltho.jfrog.io/default-docker-local/${{ env.DOCKER_IMAGE_NAME }}
