@@ -119,13 +119,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Login to JFrog
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: oltho.jfrog.io
-      #     username: ${{ secrets.JFROG_USERNAME }}
-      #     password: ${{ secrets.JFROG_ACCESS_TOKEN }}
+      - name: Login to JFrog
+        uses: docker/login-action@v1
+        with:
+          registry: oltho.jfrog.io
+          username: ${{ secrets.JFROG_USERNAME }}
+          password: ${{ secrets.JFROG_ACCESS_TOKEN }}
 
       # pushing docker image
       - name: push docker image to GHCR
