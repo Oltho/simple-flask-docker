@@ -99,9 +99,8 @@ jobs:
           TESTINFRA_DOCKER_IMAGE_NAME: ${{ needs.docker-build.outputs.docker_image_tag }}
 
   push-docker-image-to-registry:
-    needs: docker-build
     uses: ./.github/workflows/docker-push.yaml
     with:
-      docker_image_name: ${{ needs.docker-build.outputs.docker_image_tag }}
-      docker_image_artifact_name: ${{ needs.docker-build.outputs.docker_image_artifact_name }}
-      docker_image_artifact_object_name: ${{ needs.docker-build.outputs.docker_image_artifact_object_name }}
+      docker_image_name: ${{ steps.docker-build.outputs.docker_image_tag }}
+      docker_image_artifact_name: ${{ steps.docker-build.outputs.docker_image_artifact_name }}
+      docker_image_artifact_object_name: ${{ steps.docker-build.outputs.docker_image_artifact_object_name }}
