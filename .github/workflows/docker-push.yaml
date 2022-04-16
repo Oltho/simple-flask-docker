@@ -1,15 +1,20 @@
 name: Push Docker image to Registry
 
+# workflow to load docker image for artifact and push to GHCR and JROG registry
+
 on:
   workflow_call:
     inputs:
       docker_image_name:
+        description: "Docker image name in format <image_name>:<tag>"
         required: true
         type: string
       docker_image_artifact_name:
+        description: "Name of the artifact (folder) to use to retreive docker image artifact"
         required: true
         type: string
       docker_image_artifact_object_name:
+          description: "Name of the artifact object to use as docker image artifact"
           required: true
           type: string
 
